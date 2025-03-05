@@ -20,11 +20,13 @@ const client = new MongoClient(uri, {
 
 const run = async () => {
   try {
-    await client.connect();
-    console.log("Successfully connect to mongodb");
+    // await client.connect();
+    // console.log("Successfully connect to mongodb");
 
     const movieCollection = client.db("CineBuzzDB").collection("moviesDb");
-    const favoriteMoviesCollection = client.db("CineBuzzDB").collection("favoriteMoviesDB");
+    const favoriteMoviesCollection = client
+      .db("CineBuzzDB")
+      .collection("favoriteMoviesDB");
 
     // MOVIE RELATED APIS
     app.get("/allMovies", async (req, res) => {
@@ -52,6 +54,26 @@ const run = async () => {
       res.send(result);
     });
 
+    app.put("/updateMovies/:id", async (req, res) => {
+      const id = req.params.id;
+      const movie = req.body;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateMovie = {
+        $set: {
+          title: movie.title,
+          poster: movie.poster,
+          duration: movie.duration,
+          rating: movie.rating,
+          description: movie.description,
+          releaseYear: movie.releaseYear,
+          genre: movie.genre,
+        },
+      };
+      const result = await movieCollection.updateOne(filter, updateMovie, options);
+      res.send(result);
+    });
+
     app.delete("/movie/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -59,40 +81,31 @@ const run = async () => {
       res.send(result);
     });
 
-
-
     // FAVORITE MOVIE RELATED APIS
 
     app.get("/favoriteMovies", async (req, res) => {
+      // const userEmail = req.query.email;
+      // console.log(userEmail);
+      // const cursor = favoriteMoviesCollection.find({email: userEmail});
       const cursor = favoriteMoviesCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     });
 
-    app.get("/favoriteMovies/:id", async (req, res) => {
-      const id = req.params.id;
-      const query = { _id: new ObjectId(id) };
-      const result = await favoriteMoviesCollection.findOne(query);
-      res.send(result);
-    });
-
     app.post("/favoriteMovies", async (req, res) => {
       const favMovies = req.body;
-      console.log(favMovies);
+      // console.log(favMovies);
       const result = await favoriteMoviesCollection.insertOne(favMovies);
       res.send(result);
     });
 
-  
-
     app.delete("/favoriteMovies/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: id };
-      console.log(query);
+      // console.log(query);
       const result = await favoriteMoviesCollection.deleteOne(query);
       res.send(result);
     });
-
   } catch (error) {
     console.log(error);
   }
