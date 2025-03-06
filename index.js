@@ -86,7 +86,6 @@ const run = async () => {
     app.get("/favoriteMovies", async (req, res) => {
       // const userEmail = req.query.email;
       // console.log(userEmail);
-      // const cursor = favoriteMoviesCollection.find({email: userEmail});
       const cursor = favoriteMoviesCollection.find();
       const result = await cursor.toArray();
       res.send(result);
