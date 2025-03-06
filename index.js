@@ -49,7 +49,6 @@ const run = async () => {
 
     app.post("/movies", async (req, res) => {
       const newMovies = req.body;
-      // console.log(newMovies);
       const result = await movieCollection.insertOne(newMovies);
       res.send(result);
     });
