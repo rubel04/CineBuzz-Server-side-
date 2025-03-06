@@ -81,8 +81,8 @@ const run = async () => {
       res.send(result);
     });
 
-    // FAVORITE MOVIE RELATED APIS
 
+    // FAVORITE MOVIE RELATED APIS
     app.get("/favoriteMovies", async (req, res) => {
       const cursor = favoriteMoviesCollection.find();
       const result = await cursor.toArray();
@@ -91,7 +91,6 @@ const run = async () => {
 
     app.post("/favoriteMovies", async (req, res) => {
       const favMovies = req.body;
-      // console.log(favMovies);
       const result = await favoriteMoviesCollection.insertOne(favMovies);
       res.send(result);
     });
