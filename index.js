@@ -84,7 +84,6 @@ const run = async () => {
     // FAVORITE MOVIE RELATED APIS
 
     app.get("/favoriteMovies", async (req, res) => {
-      // const userEmail = req.query.email;
       const cursor = favoriteMoviesCollection.find();
       const result = await cursor.toArray();
       res.send(result);
