@@ -98,7 +98,6 @@ const run = async () => {
     app.delete("/favoriteMovies/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: id };
-      // console.log(query);
       const result = await favoriteMoviesCollection.deleteOne(query);
       res.send(result);
     });
