@@ -90,6 +90,7 @@ const run = async () => {
 
     app.post("/favoriteMovies", async (req, res) => {
       const favMovies = req.body;
+      // console.log(favMovies);
       const result = await favoriteMoviesCollection.insertOne(favMovies);
       res.send(result);
     });
